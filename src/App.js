@@ -8,7 +8,7 @@ export default class App extends Component {
   state = {
     items: [],
     id: uuidv4(),
-    item: " ",
+    item: "",
     editItem: false
   };
 
@@ -36,9 +36,30 @@ export default class App extends Component {
     });
   };
 
-  clearList = () => { console.log('clearList') }
-  handleDelete = (id) => { console.log(`handle delete $(id)`) }
-  handleEdit = (id) => { console.log(`handle Edit $(id)`) }
+  clearList = () => {
+    this.setState({
+      items: []
+    })
+  }
+
+  handleDelete = (id) => {
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    this.setState({
+      items: filteredItems
+    });
+  }
+
+  handleEdit = (id) => {
+    const filteredItems = this.state.items.filter(item => item.id !== id);
+    const selectedItem = this.state.items.find(item => item.id === id);
+    console.log(selectedItem)
+    this.setState({
+      items: filteredItems,
+      item: selectedItem.title,
+      id: id,
+      editItem: true
+    });
+  }
 
 
   render() {
@@ -49,7 +70,7 @@ export default class App extends Component {
             <div className="col-10 mx-auto col-md-8 mt-5">
               <h3 className="text-capitalize text-center">Todo Input</h3>
               <TodoInput item={this.state.item} handleChange={this.handleChange} handleSubmit={this.handleSubmit} editItem={this.state.editItem} />
-              <TodoList items={this.state.items} clearList={this.clearList} handleChange={this.handleDelete} handleEdit={this.handleEdit} />
+              <TodoList items={this.state.items} clearList={this.clearList} handleDelete={this.handleDelete} handleEdit={this.handleEdit} />
             </div>
           </div>
         </div>
